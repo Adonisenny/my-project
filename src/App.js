@@ -6,45 +6,43 @@ import Bloglist from './Components/Bloglist'
 import NavBar from './Components/NavBar';
 import Home from './Components/Home';
 import Create from './Components/Create';
-import TipCalculator from './Components/TipCalculator';
-      function App() {
-const [blogs,setBlogs] =useState(null);
+import supabase from './config/subabaseclient';
+import Profile from './Components/form2';
+import Update from './Components/Update';
+
+      function App({url}) {
+
 const [inputed,setInputed] =useState('')
-const[pending,setIsPending] =useState(true)
-
-useEffect(() => {
-fetch('http://localhost:8080/blogs').then(res => {
- return res.json( )
-})
-.then(data => {
-
-  setBlogs(data)
-  setIsPending(false)
-})
-},[])
-  
-//blogs.filter(blog =>blog.includes(value) )
 
 
   
   return (
      <Router>
-     <div>
+     <>
+      <NavBar inputed={inputed} setInputed={setInputed}/>
       
-     {pending && <p>loading</p>}
+     
+     
+      
      <Switch>
       <Route exact path='/'>
-    <Home  inputed={inputed} setInputed={setInputed} blogs={blogs}  />
+    <Home  inputed={inputed} setInputed={setInputed}  />
     </Route>
     <Route exact path='/create'>
     <Create />
+    </Route>
+    <Route  path='/form2'>
+    <Profile />
+    </Route>
+    <Route path='/:id'>
+    <Update />
     </Route>
     </Switch>
    
     
     
       
-    </div>
+    </>
     </Router>
     
   );

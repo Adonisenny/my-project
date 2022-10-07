@@ -1,98 +1,124 @@
 import { useEffect, useState } from 'react'
-
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import  supabase  from "../config/subabaseclient"
+import Home from './Home'
+  const Profile = () => {
+ const [image,setImage] =useState(null)
+const[avatarUrl,setAvatarUrl] =useState('')
+const [message,setMessage] =useState('')
+const[fUrl,setFUrl] = useState(null)
+const [fetchError,setFetchError] = useState(null)
+
+const[breed,setBreed] =useState('')
+const[description,setDescription] = useState('')
+const history = useHistory()
 
 
-const Avatar = ({ url, size, onUpload }) => {
-  const [avatarUrl, setAvatarUrl] = useState(null)
-  const [uploading, setUploading] = useState(false)
-  
 
 
-  useEffect(() => {
-    if (url) downloadImage(url)
-  }, [url])
 
-  const downloadImage = async (path) => {
-    try {
-      const { data, error } = await supabase.storage
-        .from('avatars')
-        .download(path)
-        if(data){
-          console.log(data)
-        }
-      if (error) {
-        console.log('It has eror')
-      }
-     
-      const url = URL.createObjectURL(data)
     
-      setAvatarUrl(url)
-    } catch (error) {
-      console.log('Error downloading image: ', error.message)
-    }
-  }
-
-  const uploadAvatar = async (event) => {
-    try {
-      setUploading(true)
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.')
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault()
+      if(!breed || !description){
+        console.log('fill in all the fields')
       }
-
-      const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
-
-      let { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file)
+    
+      let avatarUrl = ''
+      
+      if(image){
+        const {data,error} = await supabase.storage.from('avatars').upload(`${Date.now()}_${image.name}`,image)
         
-      if (uploadError) {
-        throw uploadError
+        if(error){
+          console.log(error)
+        }
+        if(data){
+setAvatarUrl(data.Key)
+avatarUrl = data.Key
+        }
       }
-      
-
-      onUpload(filePath)
-    } catch (error) {
-      console.log(error.message)
-    } finally {
-      setUploading(false)
-    }
-  }
-
-  return (
-    <div>
-      
-    <div style={{ width: size }} aria-live="polite">
-      <img
-        src={avatarUrl ? avatarUrl : `https://place-hold.it/${size}x${size}`}
-        alt={avatarUrl ? 'Avatar' : 'No image'}
-        className="avatar image"
-        style={{ height: size, width: size }}
-      />
-      {uploading ? (
-        'Uploading...'
-      ) : (
-        <>
-                <label htmlFor='Image'>Images:</label>  
-        
-            <input
-              type="file"
-              id="single"
-              accept="image/*"
-              onChange={uploadAvatar}
-              disabled={uploading}
-            />
-            
-            
-          
-        </>
-      )}
-      </div>
-    </div>
-  )
+const {data,error} =await supabase.from('trying').upsert({
+  
+  breed:breed,
+  description:description,
+  avatar_url : avatarUrl
+})
+if(error){
+  console.log(error)
 }
-export default Avatar
+
+if(data){
+setMessage('profile updaated')
+console.log('updated')
+history.push('/')
+}
+
+    }
+    
+     useEffect(()=> {
+      const fetchUrl = async () =>{
+        const {data,error} = await supabase
+      .from('trying')
+      .select()
+    if(error){
+setFetchError('error plenty')
+    }
+      if(data){
+        
+        
+  setFUrl(data)
+ 
+
+  
+  setFetchError(null)
+  
+      }
+      
+    
+    }
+      fetchUrl()
+      
+
+     },[]) 
+  
+     
+      
+    return ( 
+
+<>
+
+<p>{message}</p>
+  
+  <form className='createForm' onSubmit={handleSubmit} >
+
+  <label htmlFor="title"> Breed</label>
+        <input 
+          type="text" 
+          id="title"
+          value={breed}
+          onChange={(e) => setBreed(e.target.value)}
+        />
+
+        <label htmlFor="description">Description:</label>
+        <input 
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          accept='image/png,image/jpeg'
+        />
+
+
+<input 
+type='file'
+
+onChange={e => setImage(e.target.files[0])}
+/>
+<button className="buts">submit</button>
+  </form>
+
+</>
+     );
+  }
+   
+  export default Profile;

@@ -23,8 +23,8 @@ const NavBar = ({inputed,setInputed}) => {
         
     <div className ='hidden md:flex space-x-6 pt-3 '>
     <Link to="/" className="hover:text-darkGrayishBlue p-1 px-4 pt-3 text-white bg-slate-600 rounded-full baseline text-xs">Home</Link>
-    <a href="bbdb"  className="hover:text-darkGrayishBlue p-1 px-4 pt-3 text-white bg-slate-600 rounded-full baseline text-xs">Gallery</a>
-<a href="bbd"  className="hover:text-darkGrayishBlue p-1 px-4 pt-3 text-white bg-slate-600 rounded-full baseline text-xs">New Blog</a>
+    <Link to="/"  className="hover:text-darkGrayishBlue p-1 px-4 pt-3 text-white bg-slate-600 rounded-full baseline text-xs">Gallery</Link>
+<Link to="form2"  className="hover:text-darkGrayishBlue p-1 px-4 pt-3 text-white bg-slate-600 rounded-full baseline text-xs">New Blog</Link>
 <Link to ="/create"  className="hover:text-darkGrayishBlue p-1 px-4 pt-3 text-white bg-slate-600 rounded-full baseline text-xs">Add Image</Link>
     
     <form className="max-w-sm">
@@ -49,7 +49,7 @@ const NavBar = ({inputed,setInputed}) => {
         sm:self-center left-6 right-6  drop-shadow-md ">
             <Link to='/' className="hover:bg-sky-700 hover:p-2" >Home</Link>
             <Link to='/' className="hover:bg-sky-700 hover:p-2" >Gallery</Link>
-            <Link to='/' className="hover:bg-sky-700 hover:p-2">New Blog</Link>
+            <Link to='/form2' className="hover:bg-sky-700 hover:p-2">New Blog</Link>
             <Link to='/create' className="hover:bg-sky-700 hover:p-2">Add Image</Link>
 
         </div>

@@ -25,6 +25,7 @@ const Form1 = ({title,description,setTitle,formError,setDescription,handleSubmit
         />
 
 <button className="buts" >add dogs</button>    
+
       </form>
     
     
